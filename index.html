@@ -213,39 +213,45 @@
 
       // Function to add items to the invoice
       function addItemToInvoice(itemName, qty, rate) {
-        const tableBody = document.querySelector("#billTable tbody");
-        const row = document.createElement("tr");
-        row.innerHTML = `
-                <td><input type="text" class="item" value="${itemName}" placeholder="Enter item description" /></td>
-                <td><input type="number" class="qty" value="${qty}" /></td>
-                <td><input type="number" class="rate" value="${rate}" /></td>
-                <td class="amount">${qty * rate}</td>
-            `;
-        tableBody.appendChild(row);
+  const tableBody = document.querySelector("#billTable tbody");
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td><input type="text" class="item" value="${itemName}" placeholder="Enter item description" /></td>
+    <td><input type="text" class="qty" value="${qty}" /></td> <!-- Changed to text -->
+    <td><input type="number" class="rate" value="${rate}" /></td>
+    <td class="amount">${qty * rate}</td>
+  `;
+  tableBody.appendChild(row);
 
-        // Add event listener for changes in quantity and rate
-        row.querySelectorAll(".qty, .rate").forEach((input) => {
-          input.addEventListener("input", calculateTotal);
-        });
+  // Add event listener for changes in quantity and rate
+  row.querySelectorAll(".qty, .rate").forEach((input) => {
+    input.addEventListener("input", calculateTotal);
+  });
 
-        calculateTotal();
-      }
+  calculateTotal();
+}
+
 
       // Function to calculate the total amount
       function calculateTotal() {
-        const rows = document.querySelectorAll("#billTable tbody tr");
-        let total = 0;
+  const rows = document.querySelectorAll("#billTable tbody tr");
+  let total = 0;
 
-        rows.forEach((row) => {
-          const qty = row.querySelector(".qty").value;
-          const rate = row.querySelector(".rate").value;
-          const amount = qty * rate;
-          row.querySelector(".amount").textContent = amount;
-          total += amount;
-        });
+  rows.forEach((row) => {
+    let qty = row.querySelector(".qty").value;
+    qty = qty.match(/[\d.]+/);  // Extract the numerical part using regex
+    qty = qty ? parseFloat(qty[0]) : 0;  // Convert to float, default to 0 if invalid
+    
+    const rate = parseFloat(row.querySelector(".rate").value);
+    const amount = qty * rate;
+    
+    row.querySelector(".amount").textContent = amount.toFixed(2);  // Keep 2 decimal points
+    total += amount;
+  });
 
-        document.getElementById("total").textContent = total;
-      }
+  document.getElementById("total").textContent = total.toFixed(2);  // Keep 2 decimal points
+}
+
 
       // Add a saved item to the saved items section
       function addSavedItem(name, cost) {

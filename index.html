@@ -114,7 +114,20 @@
       <!-- Invoice metadata (ID, Date, etc.) -->
       <div class="invoice-details">
         <p><strong>Invoice ID:</strong> <span id="invoiceId"></span></p>
-        <p><strong>Date:</strong> <span id="currentDate"></span></p>
+        <p>
+          <strong>Date:</strong>
+          <input
+            type="date"
+            id="currentDate"
+            style="
+              border: none;
+              border-bottom: 1px solid black;
+              padding-left: 5px;
+              font-size: 16px;
+              font-family: 'Arial', sans-serif;
+            "
+          />
+        </p>
       </div>
       <!-- "Bill to" Section for client name -->
       <div class="invoice-details">
@@ -190,8 +203,8 @@
 
       // Set the invoice ID and current date when the page loads
       document.getElementById("invoiceId").textContent = generateInvoiceId();
-      document.getElementById("currentDate").textContent =
-        new Date().toLocaleDateString();
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById("currentDate").value = today;
 
       // Add event listener to Add Item button
       document.getElementById("addItem").addEventListener("click", () => {
